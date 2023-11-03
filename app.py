@@ -2,6 +2,9 @@ from flask import Flask, request, jsonify, redirect, render_template
 from Config.db import app
 import api.index
 import Routes.index as Routes
+from flask_cors import CORS
+
+CORS(app)
 
 app.register_blueprint(Routes.Auth.auth, url_prefix="/auth")
 app.register_blueprint(Routes.User.user, url_prefix="/user")
