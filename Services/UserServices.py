@@ -59,9 +59,9 @@ def get_by_id_number(id_number):
         return None
 
 # Function to get a user by their ID
-def get_admin(email, password):
+def get_user_by_email_and_password(email, password):
     try:
-        user = Users.query.filter_by(email=email, password=password, role='admin').first()
+        user = Users.query.filter_by(email=email, password=password).first()
         return user
     except Exception as e:
         print("An error occurred while getting the admin", e)
