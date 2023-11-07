@@ -33,9 +33,17 @@ def create_product():
     
 @product.route('/find_all', methods=['GET'])
 def find_all():
-    products = Services.Product.get_all()
-    return jsonify(products=products), 200
-
+    #Getting the token
+    token = request.headers['Authorization']
+    token = token.replace("Bearer","")
+    token = token.replace(" ","")
+    vf = Utils.Token.verify_token(token)
+    #Verifying the token  
+    if vf["error"] == False:
+        products = Services.Product.get_all()
+        return jsonify(products=products), 200
+    else:
+        return jsonify({'message': 'Incorrect credentials'}), 401
 @product.route('/delete', methods=['DELETE'])
 def delete_product():
     #Getting the token
