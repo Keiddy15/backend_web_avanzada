@@ -13,7 +13,7 @@ def login():
     email = data['email']
     password = data['password']
     #Get the user
-    user = Services.Users.get_admin(email=email, password=password)
+    user = Services.Users.get_user_by_email_and_password(email=email, password=password)
     #Validating user
     if user:
         access_token = Utils.Token.generate_token(email, password)
