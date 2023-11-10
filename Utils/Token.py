@@ -13,13 +13,15 @@ def generate_expiration_date(day=0, hours=0, minutes=0, seconds=0):
 
 
 # Function to generate token
-def generate_token(user_token, pass_token):
+def generate_token(email, id_number, role, name):
     try:
         expiration_time = generate_expiration_date(day=2)["token"]
         payload = {
             "exp": expiration_time,
-            "user_id": user_token,
-            "user_pass": pass_token,
+            "email": email,
+            "id_number": id_number,
+            "role": role,
+            "name": name,
         }
         token = jwt.encode(payload, "KOPAYTOKEN", algorithm="HS256")
         return Out_response(False, "Token generated", data=token)
