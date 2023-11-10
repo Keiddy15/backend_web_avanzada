@@ -57,7 +57,7 @@ def find_by_user(id_number):
 
 
 @package.route('/find_detail_one/<id_number>', methods=['GET'])
-def find_details_by_user(id_number):
+def find_details(id_number):
     try:
         # Getting the token
         token = request.headers['Authorization']
@@ -66,16 +66,13 @@ def find_details_by_user(id_number):
         vf = Utils.Token.verify_token(token)
         # Verifying the token
         if vf["error"] == False:
-            # Getting package by user
-            user = Services.Users.get_by_id_number(id_number)
-            if user == None:
-                return jsonify({"error": True, "message": "User does not exist"}), 400
+            package = Services.Package.get_detail(id_number)
+            print(package)
+            if package:
+                print("hr")
+                return jsonify(package=package), 200
             else:
-                package = Services.Package.get_details_by_user(user["id"])
-                if package:
-                    return jsonify(package=package), 200
-                else:
-                    return jsonify({"error": True, "message": "No package found"}), 404
+                return jsonify({"error": True, "message": "No package found"}), 404
         else:
             return jsonify(vf), 401
     except Exception as e:
