@@ -106,7 +106,8 @@ def get_by_user(id_user):
                 "date": package.date,
                 "product_quantity": package.product_quantity,
                 "cumulative_total": package.cumulative_total,
-                "state": package.state
+                "state": package.state,
+                "id_package": package.id
             }
             packages_data.append(package_data)
         return packages_data
@@ -118,15 +119,15 @@ def get_by_user(id_user):
 # Function to get package details by id user
 
 
-def get_details_by_user(id_user):
+def get_detail(id_package):
     try:
-        package = Packages.query.filter_by(id_user=id_user).first()
+        package = Packages.query.filter_by(id=id_package).first()
         package_data = {
-            "id_user": id_user,
             "date": package.date,
             "product_quantity": package.product_quantity,
             "cumulative_total": package.cumulative_total,
             "state": package.state,
+            "id_package": id_package
         }
         if package:
             package_details = PackageDetails.query.filter_by(
