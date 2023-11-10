@@ -14,7 +14,7 @@ def create():
     token = token.replace("Bearer","")
     token = token.replace(" ","")
     vf = Utils.Token.verify_token(token)
-    #Verifying the token  
+    #Verifying the token
     if vf["error"] == False:
         data = request.get_json()
         name = data['name']
@@ -34,21 +34,26 @@ def create():
                 return jsonify({"error": True, "message": "User exist"}), 400
     else:
         return jsonify(vf), 401
-    
+
 @user.route('/find_all', methods=['GET'])
 def find_all():
-    #Getting the token
-    token = request.headers['Authorization']
-    token = token.replace("Bearer","")
-    token = token.replace(" ","")
-    vf = Utils.Token.verify_token(token)
-    #Verifying the token  
-    if vf["error"] == False:
-        #Getting all users
-        users = Services.Users.get_all()
-        return jsonify(users=users), 200
+    if 'Authorization' in request.headers:
+        print("test")
+        token = request.headers['Authorization']
+        token = token.replace("Bearer","")
+        token = token.replace(" ","")
+        vf = Utils.Token.verify_token(token)
+        #Verifying the token
+        if vf["error"] == False:
+            #Getting all users
+            users = Services.Users.get_all()
+            return jsonify(users=users), 200
+        else:
+            return jsonify(vf), 401
     else:
-        return jsonify(vf), 401
+        return jsonify({"error": True, "message": "You need to send the token"}), 401
+
+
 
 @user.route('/find_one/<id_number>', methods=['GET'])
 def find_one(id_number):
@@ -57,7 +62,7 @@ def find_one(id_number):
     token = token.replace("Bearer","")
     token = token.replace(" ","")
     vf = Utils.Token.verify_token(token)
-    #Verifying the token  
+    #Verifying the token
     if vf["error"] == False:
         #Getting a specific user
         users = Services.Users.get_by_id_number(id_number)
@@ -67,7 +72,7 @@ def find_one(id_number):
             return jsonify(users=users), 200
     else:
         return jsonify(vf), 401
-    
+
 @user.route('/update', methods=['PUT'])
 def update():
     #Getting the token
@@ -75,7 +80,7 @@ def update():
     token = token.replace("Bearer","")
     token = token.replace(" ","")
     vf = Utils.Token.verify_token(token)
-    #Verifying the token  
+    #Verifying the token
     if vf["error"] == False:
         data = request.get_json()
         id_number = data["id_number"]
