@@ -96,8 +96,11 @@ def get_all():
 
 def get_by_user(id_user):
     try:
-        package = Packages.query.filter_by(id_user=id_user).first()
-        if package:
+        packages = Packages.query.filter_by(id_user=id_user).all()
+        print(packages)
+        packages_data = []
+        for package in packages:
+            print("hi")
             package_data = {
                 "id_user": package.id_user,
                 "date": package.date,
@@ -105,9 +108,8 @@ def get_by_user(id_user):
                 "cumulative_total": package.cumulative_total,
                 "state": package.state
             }
-            return package_data
-        else:
-            return None
+            packages_data.append(package_data)
+        return packages_data
     except Exception as e:
         print("An error occurred while getting the package by user id", e)
         return None
