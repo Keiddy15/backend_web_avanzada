@@ -68,11 +68,14 @@ def get_user_by_email_and_password(email, password):
         return None
 
 # Function to update a user by their ID
-def update(id_number, name):
+def update(id_number, name, email, password, role):
     try:
         user = Users.query.filter_by(id_number=id_number).first()
         if user:
             user.name = name
+            user.email = email
+            user.password = password
+            user.role = role
             db.session.commit()
             user_data = {
                 "name": user.name,
