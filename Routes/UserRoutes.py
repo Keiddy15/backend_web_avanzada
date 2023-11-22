@@ -85,8 +85,11 @@ def update():
         data = request.get_json()
         id_number = data["id_number"]
         name = data['name']
+        email = data['email']
+        password = data['password']
+        role = data['role']
         #Updating the user
-        users = Services.Users.update(id_number, name)
+        users = Services.Users.update(id_number, name, email, password, role)
         if users == None:
             return jsonify({"error": True, "message": "User does not exist"}), 400
         else:
