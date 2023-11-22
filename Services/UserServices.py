@@ -39,7 +39,7 @@ def get_all():
         print("An error occurred while getting all users", e)
         return None
 
-# Function to get a user by their ID
+# Function to get a user by their ID number
 def get_by_id_number(id_number):
     try:
         user = Users.query.filter_by(id_number=id_number).first()
@@ -57,6 +57,26 @@ def get_by_id_number(id_number):
     except Exception as e:
         print("An error occurred while getting the user by id", e)
         return None
+
+# Function to get a user by their ID
+def get_by_id(id):
+    try:
+        user = Users.query.filter_by(id=id).first()
+        if(user):
+            user_data = {
+                "id": user.id,
+                "name": user.name,
+                "email": user.email,
+                "role": user.role,
+                "id_number": user.id_number,
+            }
+            return user_data
+        else:
+            return None
+    except Exception as e:
+        print("An error occurred while getting the user by id", e)
+        return None
+    
 
 # Function to get a user by their ID
 def get_user_by_email_and_password(email, password):
