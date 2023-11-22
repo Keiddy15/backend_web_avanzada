@@ -3,8 +3,9 @@ from Models.PackageDetails import PackageDetails
 from Config.db import db
 import Utils.index as Utils
 import Services.ProductServices as Product
-# Function to create a package
+import Services.UserServices as User
 
+# Function to create a package
 
 def create(id_user, product_quantity, cumulative_total):
     try:
@@ -77,12 +78,14 @@ def get_all():
         packages = Packages.query.all()
         packages_data = []
         for package in packages:
+            user = User.get_by_id(package.id_user)
             package = {
                 "id_user": package.id_user,
                 "date": package.date,
                 "product_quantity": package.product_quantity,
                 "cumulative_total": package.cumulative_total,
-                "state": package.state
+                "state": package.state,
+                "id_number": user["id_number"]
             }
             packages_data.append(package)
         return packages_data
