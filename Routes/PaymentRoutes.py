@@ -19,6 +19,7 @@ def create_pay():
     if vf["error"] == False:
         data = request.get_json()
         user_id_number = data['user_id_number']
+        id_pck = data['id_pck']
 
         # Get user
         user = Services.Users.get_by_id_number(user_id_number)
@@ -27,25 +28,17 @@ def create_pay():
             return jsonify({"error": True, "message": "User does not exist"}), 400
         else:
             # Getting all users completed packages
-            package_data = Services.Package.get_all_user_completed_packages(
-                user_id)
+            package_data = Services.Package.get_by_id(id_pck)
             if package_data == None:
                 return jsonify({"error": True, "message": "Unable to create payment due to no package outstanding"}), 400
             else:
                 # Getting the amount
-                amount = 0
-                for pckg in package_data:
-                    amount = amount + pckg["cumulative_total"]
+                amount = package_data["cumulative_total"]
 
                 # Create payment
                 new_pay = Services.Payment.create(user_id, amount)
-                
-                for pckg in package_data:
-                    # Updaye package status
-                    Services.Package.update(
-                        pckg["id_package"], 12, "Closed", pckg["cumulative_total"])
-                    # Create payment record_detail
-                    Services.Payment.add_payment_detail(new_pay["id"], pckg["id_package"])
+                Services.Package.update(package_data["id"], 12, "Closed", package_data["cumulative_total"])
+                Services.Payment.add_payment_detail(new_pay["id"], package_data["id"])
                 return jsonify(new_pay=new_pay), 200
     else:
         return jsonify(vf), 401
