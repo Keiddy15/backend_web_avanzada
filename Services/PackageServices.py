@@ -69,6 +69,27 @@ def get_last_user_package(id_user):
     except Exception as e:
         print("An error occurred while getting the last user package", e)
         return None
+    
+# Function to get package by id
+
+def get_by_id(id_pck):
+    try:
+        package = Packages.query.filter_by(id=id_pck).first()
+        if package:
+            package_data = {
+                "id": package.id,
+                "id_user": package.id_user,
+                "date": package.date,
+                "product_quantity": package.product_quantity,
+                "cumulative_total": package.cumulative_total,
+                "state": package.state
+            }
+            return package_data
+        else:
+            return None
+    except Exception as e:
+        print("An error occurred while getting the last user package", e)
+        return None
 
 # Function to get all packages
 
@@ -85,7 +106,8 @@ def get_all():
                 "product_quantity": package.product_quantity,
                 "cumulative_total": package.cumulative_total,
                 "state": package.state,
-                "id_number": user["id_number"]
+                "id_number": user["id_number"],
+                "id_pck": package.id,
             }
             packages_data.append(package)
         return packages_data
